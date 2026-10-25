@@ -1,3 +1,4 @@
+.game-list app-search { display: block; margin-bottom: 0.5rem; }
 .game-list ul { display: grid; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }
 .game-list li { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.6rem; border: 1px solid #ccc; }
 .game-list button { border: 0; background: none; cursor: pointer; text-align: left; }
