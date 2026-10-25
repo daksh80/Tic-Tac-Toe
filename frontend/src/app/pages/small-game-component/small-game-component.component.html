@@ -1,0 +1,19 @@
+<div class="game-studio">
+  <header class="studio-header">
+    <span class="studio-mark" aria-hidden="true">G</span>
+    <span>Game Studio</span>
+  </header>
+
+  <main class="game-content">
+    <app-game-list
+      [games]="gameList"
+      (gameSelected)="onGameSelected($event)"
+    />
+    @if (selectedGame; as game) {
+      <section class="selected-game" [ngSwitch]="game.id">
+        <app-tic-tac-toe *ngSwitchCase="'tic-tac-toe'" />
+        <p *ngSwitchDefault>{{ game.name }} is selected, but its game view is not available yet.</p>
+      </section>
+    }
+  </main>
+</div>

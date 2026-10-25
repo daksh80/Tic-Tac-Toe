@@ -1,0 +1,19 @@
+<section class="game-list" aria-labelledby="game-list-title">
+  <h2 id="game-list-title">Available games</h2>
+  <app-search (searchChange)="onSearchChange($event)" />
+
+  <ul>
+    @for (game of filteredGames; track game.id) {
+      <li>
+        <button type="button" [disabled]="!game.isAvailable" (click)="selectGame(game)">
+          {{ game.name }}
+        </button>
+        <span class="availability" [class.unavailable]="!game.isAvailable">
+          {{ game.isAvailable ? 'Available' : 'Coming soon' }}
+        </span>
+      </li>
+    } @empty {
+      <li class="empty-state">No games found.</li>
+    }
+  </ul>
+</section>

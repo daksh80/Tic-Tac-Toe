@@ -1,0 +1,12 @@
+.studio-header { padding: 1rem; font-weight: bold; }
+.game-content {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 1rem;
+}
+.selected-game { min-width: 0; }
+
+@media (max-width: 600px) {
+  .game-content { grid-template-columns: 1fr; }
+}

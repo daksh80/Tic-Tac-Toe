@@ -1,0 +1,104 @@
+<section class="tic-tac-toe" aria-labelledby="tic-tac-toe-title">
+  <h2 id="tic-tac-toe-title">Tic-Tac-Toe</h2>
+
+  @if (loading) {
+    <p>Connecting to the game server...</p>
+  } @else {
+    <form class="board-size-control" (submit)="createGrid($event)">
+      <label for="grid-size">Grid size</label>
+      <input
+        id="grid-size"
+        type="number"
+        [min]="minGridSize"
+        [max]="maxGridSize"
+        step="1"
+        required
+        [value]="gridSize ?? ''"
+        [disabled]="busy"
+        (input)="updateGridSize($event)"
+      >
+      <span>Creates an N × N grid ({{ minGridSize }}–{{ maxGridSize }})</span>
+      <button type="submit" [disabled]="busy">
+        {{ game ? 'Create new grid' : 'Create grid' }}
+      </button>
+    </form>
+
+    @if (game) {
+      <div class="mode-controls" role="group" aria-label="Game mode">
+        @for (mode of modes; track mode.value) {
+          <div
+            role="button"
+            tabindex="0"
+            [class.active]="selectedMode === mode.value"
+            [attr.aria-pressed]="selectedMode === mode.value"
+            [attr.aria-disabled]="busy"
+            (click)="startGame(mode.value)"
+            (keydown)="onModeKeydown($event, mode.value)"
+          >
+            {{ mode.label }}
+          </div>
+        }
+      </div>
+
+      @if (scoreboard) {
+        <section class="scoreboard" aria-labelledby="scoreboard-title">
+          <h3 id="scoreboard-title">Session scoreboard</h3>
+          <p>
+            @for (item of scoreboardLabels; track item.key) {
+              <span>{{ item.label }}: {{ score(item.key) }}</span>
+            }
+          </p>
+          <button type="button" [disabled]="busy" (click)="resetScoreboard()">Reset Scoreboard</button>
+        </section>
+      }
+
+      <p class="status" aria-live="polite">{{ statusMessage }}</p>
+      <div
+        class="board"
+        role="grid"
+        aria-label="Tic-Tac-Toe game board"
+        [style.grid-template-columns]="'repeat(' + game.columns + ', minmax(0, 1fr))'"
+      >
+        @for (cell of game.board; track $index) {
+          <div
+            role="gridcell"
+            class="cell"
+            [class.winning-cell]="isWinningCell($index)"
+            [attr.aria-disabled]="busy || game.status !== 'inProgress' || cell !== null"
+            [attr.aria-label]="cellLabel($index, cell)"
+            [attr.tabindex]="busy || game.status !== 'inProgress' || cell !== null ? -1 : 0"
+            (click)="playCell($index)"
+            (keydown)="onCellKeydown($event, $index)"
+          >
+            {{ cell }}
+          </div>
+        }
+      </div>
+
+      <div class="game-actions">
+        @for (action of gameActions; track action.id) {
+          <button
+            type="button"
+            [disabled]="busy || (action.id === 'undo' && !canUndo())"
+            (click)="runGameAction(action.id)"
+          >{{ action.label }}</button>
+        }
+      </div>
+
+      <section class="move-history" aria-labelledby="move-history-title">
+        <h3 id="move-history-title">Move history</h3>
+        <ol>
+          @for (move of game.moves; track move.moveNumber) {
+            <li>Move {{ move.moveNumber }} — Player {{ move.player }} — Row {{ move.row }}, Column {{ move.column }}</li>
+          } @empty {
+            <li>No moves yet.</li>
+          }
+        </ol>
+      </section>
+    }
+  }
+
+  @if (errorMessage) {
+    <p class="error" role="alert">{{ errorMessage }}</p>
+  }
+</section>
