@@ -9,3 +9,4 @@
 
 # Local system files
 .DS_Store
+.vercel
