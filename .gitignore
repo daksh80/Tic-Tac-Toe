@@ -1,0 +1,11 @@
+# .NET build output
+**/bin/
+**/obj/
+**/TestResults/
+
+# Angular build and cache output
+**/dist/
+**/.angular/cache/
+
+# Local system files
+.DS_Store
